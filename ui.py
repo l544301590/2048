@@ -29,13 +29,33 @@ class Block(pygame.sprite.Sprite):
         self.speed = (vx, vy)
 
     def update(self):
-        pos = self.rect[0]
-        if pos == self.des_pos:  # achieve destination
-            self.speed = 0, 0
-            return
-        pos[0] += self.speed[0]
-        pos[1] += self.speed[1]
-        self.rect[0] = pos
+
+        assert self.speed[0]*self.speed[1] == 0, 'Wrong direction(speed)!'
+        assert self.image, 'Block with no image!'
+
+        cur_pos = self.rect[0]
+
+        # supervise if destination achieved
+        if self.speed[0] < 0:  # head left
+            if cur_pos[0] <= self.des_pos[0]:
+                self.speed = 0, 0
+                return
+        if self.speed[0] > 0:  # head right
+            if cur_pos[0] >= self.des_pos[0]:
+                self.speed = 0, 0
+                return
+        if self.speed[1] > 0:
+            if cur_pos[1] >= self.des_pos[1]:
+                self.speed = 0, 0
+                return
+        if self.speed[1] < 0:
+            if cur_pos[1] <= self.des_pos[1]:
+                self.speed = 0, 0
+                return
+
+        res_pos = cur_pos[0] + self.speed[0], cur_pos[1] + self.speed[1]
+
+        self.rect = res_pos, self.rect[1]
 
 
 if __name__ == '__main__':
@@ -48,20 +68,31 @@ if __name__ == '__main__':
         for j in range(len(BLOCK_REGIONS[0])):
             pygame.draw.rect(main_panel, BLOCK_COLORS[0][0], BLOCK_REGIONS[i][j])
 
+    main_bg = main_panel.copy()
     blocks = pygame.sprite.Group()
     test_block = Block(1, BLOCK_REGIONS[0][0])
     blocks.add(test_block)
 
     while True:
+        # clear all
+        main_panel.blit(main_bg, (0, 0))
+
+        # handle events
         for event in pygame.event.get():
             if event.type == QUIT:
                 exit()
             if event.type == KEYDOWN:
                 if event.key == K_DOWN:
+                    # TODO calculate the destination
                     test_block.move(BLOCK_REGIONS[1][0][0])
 
+        # modify the reference variable
         blocks.update()
         blocks.draw(main_panel)
+
+        # modify the pixels
         screen.blit(main_panel, (M_PANEL_MARGIN, M_PANEL_MARGIN))
+
+        # render all
         pygame.display.flip()
 

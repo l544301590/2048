@@ -60,7 +60,6 @@ if __name__ == '__main__':
             if event.type == QUIT:
                 exit()
 
-
         blocks.update()
         blocks.draw(main_panel)
         screen.blit(main_panel, (M_PANEL_MARGIN, M_PANEL_MARGIN))

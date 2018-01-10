@@ -53,12 +53,12 @@ if __name__ == '__main__':
     blocks.add(test_block)
 
     while True:
-        keys = pygame.key.get_pressed()
-        if keys[KEYDOWN]:
-            print(1)
         for event in pygame.event.get():
             if event.type == QUIT:
                 exit()
+            if event.type == KEYDOWN:
+                if event.key == K_DOWN:
+                    test_block.move(BLOCK_REGIONS[1][0][0])
 
         blocks.update()
         blocks.draw(main_panel)

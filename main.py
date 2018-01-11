@@ -1,5 +1,5 @@
 import random
-import pygame.examples.cursors
+from ui import *
 
 
 class Grid:
@@ -20,7 +20,7 @@ class Grid:
             [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4]
         ]
 
-    def next(self):
+    def gen_next(self):
         # random position
         zero_indexes = []
         for i in range(4):
@@ -115,4 +115,3 @@ class Grid:
 
 
 if __name__ == '__main__':
-    pygame.
